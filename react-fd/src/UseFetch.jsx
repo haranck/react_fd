@@ -1,35 +1,24 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-function UseFetch(url) {
-  const [data, setData] = useState(()=>{
-    const stored = localStorage.getItem('users')
-    return stored ? JSON.parse(stored) : []
-  })
+export const UseFetch = (url) => {
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   useEffect(() => {
-    if(data.length > 0)return
-    async function fetchData() {
-      try {
-        setLoading(true);
-        const res = await fetch(url);
-        const data = await res.json();
-        setData(data);
-        setLoading(false);
-      } catch (error) {
-        setError(error.message);
-        setLoading(false);
+      async function fetching() {
+        try {
+          setLoading(true);
+          const res = await axios.get(url);
+          setData(res.data);
+          setLoading(false)
+        } catch (error) {
+          setError(error);
+        }
       }
-    }
-    fetchData();
-  }, [url,data]);
+      fetching()
+    },[url]);
 
-  useEffect(()=>{
-    localStorage.setItem('users',JSON.stringify(data))
-  },[data])
-
-  return { data, loading, error, setData };
-}
-
-export default UseFetch;
+  return {data,error,loading};
+};

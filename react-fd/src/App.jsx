@@ -150,3 +150,42 @@
 // }
 
 // export default App
+  
+///////////////////////////////////////////////////////////////////////////
+
+//custom hook for toggle
+
+// import React from 'react'
+// import { UseToggle } from './UseToggle'
+
+// export const App = () => {
+//   const {toggle,handleToggle} = UseToggle()
+//   return (
+//     <div>
+//       <input type="checkbox" name="" id="" checked={toggle} />
+//       <button onClick={handleToggle}>toggle</button>
+//     </div>
+//   )
+// }
+
+///////////////////////////////////////////////////////////////////////////
+
+//custom hook for fetch
+
+import React from 'react'
+import { UseFetch } from './UseFetch'
+
+export const App = () => {
+  const {data,error,loading} = UseFetch("https://jsonplaceholder.typicode.com/users")
+
+  if(error)return <p>error:{error}</p>
+  if(loading) return <p>Loading...</p>
+
+  return (
+    <ul>
+      {data.map((item,index)=>(
+        <li key={index}>{item.username}</li>
+      ))}
+    </ul>
+  )
+}
