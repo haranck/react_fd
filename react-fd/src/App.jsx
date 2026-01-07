@@ -172,20 +172,88 @@
 
 //custom hook for fetch
 
-import React from 'react'
-import { UseFetch } from './UseFetch'
+// import React from 'react'
+// import { UseFetch } from './UseFetch'
+
+// export const App = () => {
+//   const {data,error,loading} = UseFetch("https://jsonplaceholder.typicode.com/users")
+
+//   if(error)return <p>error:{error}</p>
+//   if(loading) return <p>Loading...</p>
+
+//   return (
+//     <ul>
+//       {data.map((item,index)=>(
+//         <li key={index}>{item.username}</li>
+//       ))}
+//     </ul>
+//   )
+// }
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// import { useEffect, useRef, useState } from "react";
+
+// const Stopwatch = () => {
+//   const [seconds, setSeconds] = useState(0);
+//   const [isRunning, setIsRunning] = useState(false);
+//   const intervalRef = useRef(null); 
+
+//   useEffect(() => {
+//     if (isRunning) {
+//       intervalRef.current = setInterval(() => {
+//         setSeconds(prev => prev + 1);
+//       }, 1000);
+//     } 
+//     return () => clearInterval(intervalRef.current);
+//   }, [isRunning]);
+
+//   const start = () => setIsRunning(true);
+//   const stop = () => setIsRunning(false);
+//   const reset = () => {
+//     setIsRunning(false);
+//     setSeconds(0);
+//   };
+
+//   return (
+//     <div>
+//       <h1>Stopwatch</h1>
+//       <h2>{seconds} sec</h2>
+
+//       <button onClick={start}>Start</button>
+//       <button onClick={stop}>Stop</button>
+//       <button onClick={reset}>Reset</button>
+//     </div>
+//   );
+// };
+
+// export default Stopwatch;
+
+
+import React, { createContext, useEffect, useState } from 'react'
+import { Counter } from './Counter'
+
+export const CounterContext = createContext()
 
 export const App = () => {
-  const {data,error,loading} = UseFetch("https://jsonplaceholder.typicode.com/users")
+  const [count,setCount] =  useState(0)
 
-  if(error)return <p>error:{error}</p>
-  if(loading) return <p>Loading...</p>
+  useEffect(()=>{
+    if(count!==0&&count%5===0){
+      alert(`${count} a multiple of 5`)
+    }
+  },[count])
+
+  const increase = () => setCount((prev)=>prev+1)
+  const reset = () => setCount(0)
+  const decrease = () => setCount((prev)=> prev > 0?prev-1:0)
 
   return (
-    <ul>
-      {data.map((item,index)=>(
-        <li key={index}>{item.username}</li>
-      ))}
-    </ul>
+    <CounterContext.Provider value={{count,increase,reset,decrease}}>
+      <Counter/>
+    </CounterContext.Provider>
   )
 }
